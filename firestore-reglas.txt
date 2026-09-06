@@ -1,0 +1,28 @@
+// ============================================================
+// REGLAS DE FIRESTORE — copia esto en:
+// Firebase Console > Firestore Database > Reglas > pegar y "Publicar"
+// ============================================================
+//
+// Qué hacen estas reglas:
+// - Cualquiera puede AGREGAR su correo (registrarse como cliente).
+// - Cualquiera puede LEER la lista (porque tu panel de admin es
+//   solo una pantalla, no una cuenta real de Firebase; alguien
+//   muy técnico podría leer la colección directamente si quisiera).
+// - Nadie puede editar ni borrar registros desde el navegador.
+//
+// Si más adelante quieres que SOLO tú puedas leer la lista,
+// hay que agregar Firebase Authentication real (inicio de sesión
+// verificado por Google) en vez de la contraseña fija actual.
+// Avísame si quieres ese siguiente paso.
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /usuarios/{docId} {
+      allow read: if true;
+      allow create: if request.resource.data.email is string
+                    && request.resource.data.email.matches('.*@.*[.].*');
+      allow update, delete: if false;
+    }
+  }
+}
